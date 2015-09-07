@@ -153,6 +153,9 @@ cd $DIR && git init
 cd $DIR && git add .
 cd $DIR && git commit -m 'Initial commit'
 
+echo 'Installing git hooks'
+# TODO
+
 
 echo 'Setup complete!'
 echo "Run $DIR/tmux for default workspace"
