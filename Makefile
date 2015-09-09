@@ -1,4 +1,4 @@
-.PHONY: setup test run build
+.PHONY: setup test run build install
 
 default: run
 
@@ -15,6 +15,10 @@ build:
 run:
 	make build
 	./neww
+
+install:
+	make build
+	sudo mv ./neww /usr/local/bin
 
 test:
 	go test -timeout=60s ./...
