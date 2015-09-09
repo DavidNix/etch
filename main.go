@@ -6,6 +6,8 @@ import (
 	"html/template"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -17,13 +19,18 @@ type config struct {
 }
 
 func main() {
+	checkDependencies()
+
 	conf := setup()
 
 	dir := createDirStructure(conf.AppName)
 	exitIf(os.Chdir(dir))
 
-	writeStatic("Makefile")
-	writeStatic("dev.env")
+	initGit()
+
+	writeStatic(".git/hooks/pre_commit", 0766)
+	writeStatic("Makefile", 0666)
+	writeStatic("dev.env", 0666)
 	writeTemplate("LICENSE", conf)
 	writeTemplate("tmux", conf)
 
@@ -34,6 +41,13 @@ func exitIf(err error) {
 	if err != nil {
 		fmt.Println(err, "Exiting...")
 		os.Exit(1)
+	}
+}
+
+func checkDependencies() {
+	out, _ := exec.Command("which", "git").Output()
+	if len(out) == 0 {
+		exitIf(fmt.Errorf("Git not found, is it installed?"))
 	}
 }
 
@@ -75,8 +89,8 @@ func memoTemplate(name string) []byte {
 	return templ
 }
 
-func writeStatic(name string) {
-	exitIf(ioutil.WriteFile(name, memoTemplate(name), 0644))
+func writeStatic(name string, mode os.FileMode) {
+	exitIf(ioutil.WriteFile(name, memoTemplate(filepath.Base(name)), mode))
 }
 
 func writeTemplate(name string, c config) {
@@ -86,4 +100,9 @@ func writeTemplate(name string, c config) {
 	tmpl, err := template.New(name).Parse(string(memoTemplate(name)))
 	exitIf(err)
 	exitIf(tmpl.Execute(f, c))
+}
+
+func initGit() {
+	_, err := exec.Command("git", "init").Output()
+	exitIf(err)
 }
