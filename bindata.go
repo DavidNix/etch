@@ -167,7 +167,7 @@ func templatesTmux() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/tmux", size: 595, mode: os.FileMode(493), modTime: time.Unix(1441715728, 0)}
+	info := bindataFileInfo{name: "templates/tmux", size: 595, mode: os.FileMode(493), modTime: time.Unix(1441801473, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
