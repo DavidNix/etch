@@ -31,8 +31,8 @@ func main() {
 	writeStatic(".git/hooks/pre_commit", 0766)
 	writeStatic("Makefile", 0666)
 	writeStatic("dev.env", 0666)
-	writeTemplate("LICENSE", conf)
-	writeTemplate("tmux", conf)
+	writeTemplate("LICENSE", conf, 0666)
+	writeTemplate("tmux", conf, 0766)
 
 	fmt.Println(conf.AppName + "'s workspace is complete!")
 }
@@ -93,9 +93,10 @@ func writeStatic(name string, mode os.FileMode) {
 	exitIf(ioutil.WriteFile(name, memoTemplate(filepath.Base(name)), mode))
 }
 
-func writeTemplate(name string, c config) {
+func writeTemplate(name string, c config, mode os.FileMode) {
 	f, e := os.Create(name)
 	exitIf(e)
+	exitIf(f.Chmod(mode))
 	defer f.Close()
 	tmpl, err := template.New(name).Parse(string(memoTemplate(name)))
 	exitIf(err)
