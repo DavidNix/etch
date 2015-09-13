@@ -31,6 +31,7 @@ func main() {
 	writeStatic(".git/hooks/pre_commit", 0766)
 	writeStatic("Makefile", 0666)
 	writeStatic("dev.env", 0666)
+	writeStatic(".gitignore", 0666)
 	writeTemplate("LICENSE", conf, 0666)
 	writeTemplate("tmux", conf, 0766)
 
