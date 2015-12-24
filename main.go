@@ -23,8 +23,11 @@ func main() {
 
 	conf := setup()
 
-	dir := createDirStructure(conf.AppName)
-	exitIf(os.Chdir(dir))
+	if conf.AppName == "" {
+		exitIf(fmt.Errorf("App name cannot be blank."))
+	}
+
+	exitIf(os.Mkdir("vendor", 0777))
 
 	initGit()
 
@@ -72,16 +75,6 @@ func setup() config {
 	conf.Year = time.Now().Year()
 
 	return conf
-}
-
-func createDirStructure(name string) string {
-	if name == "" {
-		exitIf(fmt.Errorf("App name cannot be blank."))
-	}
-	sep := string(os.PathSeparator)
-	path := "." + sep + name + sep + "src" + sep + name
-	exitIf(os.MkdirAll(path, 0777))
-	return path
 }
 
 func memoTemplate(name string) []byte {

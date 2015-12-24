@@ -1,1 +1,10 @@
-neww
+.DS_Store
+*.sw[nop]
+log/*.log
+tags
+!tags/
+tmp/**/*
+!tmp/cache/.keep
+
+# binary
+etch
