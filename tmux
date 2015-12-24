@@ -18,11 +18,6 @@ if ! tmux ls | grep -q "$session"; then
 
 	sourceDevEnv $session:1.2
 	tmux resize-pane -t $session:1.2 -D 20
-
-	tmux new-window -n "convey"
-	sourceDevEnv $session:2
-	tmux send-keys -t $session:2 "goconvey" C-m
-	open http://localhost:8080
 fi
 
 tmux select-window -t $session:1

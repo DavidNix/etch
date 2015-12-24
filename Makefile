@@ -4,9 +4,10 @@ default: run
 
 setup:
 	go get -t ./...
-	go get github.com/smartystreets/goconvey
-	go get github.com/mailgun/godebug
+	go get -u github.com/mailgun/godebug
 	go get -u github.com/jteeuwen/go-bindata/...
+	go get -u github.com/cespare/reflex
+	go get -u github.com/alecthomas/gometalinter
 
 build:
 	go-bindata templates/
