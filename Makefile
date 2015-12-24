@@ -14,11 +14,11 @@ build:
 
 run:
 	make build
-	./neww
+	./etch
 
 install:
 	make build
-	sudo mv ./neww /usr/local/bin
+	sudo mv ./etch /usr/local/bin
 
 test:
 	go test -timeout=60s ./...
