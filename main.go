@@ -18,17 +18,18 @@ type config struct {
 	Year    int
 }
 
-var files = []string{".git/hooks/pre_commit", "Makefile", "dev.env", ".gitignore", "LICENSE", "tmux"}
-
 func main() {
-	checkForExistingFiles()
 	checkDependencies()
-
 	conf := setup()
 
 	if conf.AppName == "" {
 		exitIf(fmt.Errorf("App name cannot be blank."))
 	}
+
+	checkForExistingDir(conf)
+
+	exitIf(os.Mkdir(conf.AppName, 0777))
+	exitIf(os.Chdir(conf.AppName))
 
 	exitIf(os.Mkdir("vendor", 0777))
 
@@ -46,15 +47,14 @@ func main() {
 
 func exitIf(err error) {
 	if err != nil {
-		fmt.Println(err, "Exiting...")
+		fmt.Println(err, "\nExiting...")
 		os.Exit(1)
 	}
 }
 
-func checkForExistingFiles() {
-	for _, path := range files {
-		_, err := os.Stat(path)
-		exitIf(err)
+func checkForExistingDir(c config) {
+	if _, err := os.Stat(c.AppName); os.IsExist(err) {
+		exitIf(fmt.Errorf("Directory \"%s\" already exists"))
 	}
 }
 
