@@ -18,7 +18,10 @@ type config struct {
 	Year    int
 }
 
+var files = []string{".git/hooks/pre_commit", "Makefile", "dev.env", ".gitignore", "LICENSE", "tmux"}
+
 func main() {
+	checkForExistingFiles()
 	checkDependencies()
 
 	conf := setup()
@@ -45,6 +48,13 @@ func exitIf(err error) {
 	if err != nil {
 		fmt.Println(err, "Exiting...")
 		os.Exit(1)
+	}
+}
+
+func checkForExistingFiles() {
+	for _, path := range files {
+		_, err := os.Stat(path)
+		exitIf(err)
 	}
 }
 
