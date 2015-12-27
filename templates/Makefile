@@ -8,6 +8,7 @@ setup:
 	go get -u github.com/jteeuwen/go-bindata/...
 	go get -u github.com/cespare/reflex
 	go get -u github.com/alecthomas/gometalinter
+	gometalinter --install --update
 
 test:
 	go test -timeout=60s ./...
