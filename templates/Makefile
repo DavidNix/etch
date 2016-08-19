@@ -4,9 +4,7 @@ default: test
 
 setup:
 	go get -t ./...
-	go get -u github.com/mailgun/godebug
-	go get -u github.com/jteeuwen/go-bindata/...
-	go get -u github.com/cespare/reflex
+	go get -u github.com/cortesi/modd/cmd/modd
 	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install --update
 

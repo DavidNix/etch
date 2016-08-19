@@ -12,6 +12,8 @@ if ! tmux ls | grep -q "$session"; then
 	tmux send-keys -t $session:1.1 "vim" C-m
 
 	tmux resize-pane -t $session:1.2 -D 20
+
+	tmux send-keys -t $session:1.2 "modd" C-m
 fi
 
 tmux select-window -t $session:1
