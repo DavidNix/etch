@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -23,15 +24,15 @@ func main() {
 	conf := setup()
 
 	if conf.AppName == "" {
-		exitIf(fmt.Errorf("App name cannot be blank."))
+		exitIf(errors.New("App name cannot be blank."))
 	}
 
 	checkForExistingDir(conf)
 
-	exitIf(os.Mkdir(conf.AppName, 0777))
+	exitIf(os.Mkdir(conf.AppName, 0700))
 	exitIf(os.Chdir(conf.AppName))
 
-	exitIf(os.Mkdir("vendor", 0777))
+	exitIf(os.Mkdir("vendor", 0700))
 
 	initGit()
 
@@ -41,6 +42,7 @@ func main() {
 	writeStatic(".gitignore", 0666)
 	writeTemplate("LICENSE", conf, 0666)
 	writeTemplate("tmux", conf, 0766)
+	writeTemplate("modd.conf", conf, 0666)
 
 	fmt.Println(conf.AppName + "'s workspace is complete!")
 }
@@ -54,13 +56,13 @@ func exitIf(err error) {
 
 func checkForExistingDir(c config) {
 	if _, err := os.Stat(c.AppName); os.IsExist(err) {
-		exitIf(fmt.Errorf("Directory \"%s\" already exists"))
+		exitIf(errors.New("Directory \"%s\" already exists"))
 	}
 }
 
 func checkDependencies() {
-	out, _ := exec.Command("which", "git").Output()
-	if len(out) == 0 {
+	out, err := exec.Command("which", "git").Output()
+	if len(out) == 0 || err != nil {
 		exitIf(fmt.Errorf("Git not found, is it installed?"))
 	}
 }
